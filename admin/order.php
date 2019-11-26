@@ -3,6 +3,10 @@ if (empty($_SESSION['admin'])) {
     header("location:login.php");
 }
 $def = new lashopak();
+if (isset($_POST['submit'])) {
+    $cat = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_STRING);
+    $add = $def->newCategory($cat);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,11 +67,11 @@ $def = new lashopak();
                             <li class="nav-divider">
                                 Menu
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link active" href="index.php" aria-expanded="false"><i class="fa fa-fw fa-home"></i>Dashboard</a>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="index.php" aria-expanded="false"><i class="fa fa-fw fa-home"></i>Dashboard</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="order.php" aria-expanded="false"><i class="fas fa-fw fa-hourglass-half"></i>Order</a>
+                            <li class="nav-item ">
+                                <a class="nav-link active" href="order.php" aria-expanded="false"><i class="fas fa-fw fa-hourglass-half"></i>Order</a>
                             </li>
                             <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fab fa-fw fa-product-hunt"></i>Product</a>
@@ -82,7 +86,7 @@ $def = new lashopak();
                                     </ul>
                                 </div>
                             </li>
-                            <li class="nav-item ">
+                            <li class="nav-item">
                                 <a class="nav-link" href="category.php" aria-expanded="false"><i class="fas fa-fw fa-folder"></i>Category</a>
                             </li>
                             <li class="nav-item ">
@@ -120,151 +124,84 @@ $def = new lashopak();
             <div class="dashboard-ecommerce">
                 <div class="container-fluid dashboard-content ">
                     <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="page-header">
-                                <h2 class="pageheader-title">Dashboard</h2>
-                                <p class="pageheader-text">dashboard</p>
-                                <!-- <div class="page-breadcrumb">
-                                    <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Dashboard</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">E-Commerce Dashboard Template</li>
-                                        </ol>
-                                    </nav>
-                                </div> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ecommerce-widget">
-                        <div class="row">
-                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                                <div class="card border-3 border-top border-top-primary">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Users</h5>
-                                        <div class="metric-value d-inline-block">
-                                        <?php
-                                        $countUser = $def->countUser();
-                                        ?>
-                                            <h1 class="mb-1"><?= $countUser ?></h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-success font-weight-bold">
-                                            <!-- <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">5.86%</span> -->
-                                            <i class="fas fa-user fa-4x text-muted" style="top:50%;position:absolute;transform:translate(0,-50%);left:50%"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                                <div class="card border-3 border-top border-brand">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Product</h5>
-                                        <div class="metric-value d-inline-block">
-                                        <?php
-                                        $countProd = $def->countProd();
-                                        ?>
-                                            <h1 class="mb-1"><?= $countProd ?></h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-success font-weight-bold">
-                                            <!-- <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">5.86%</span> -->
-                                            <i class="fas fa-user fa-4x text-muted" style="top:50%;position:absolute;transform:translate(0,-50%);left:50%"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                                <div class="card border-3 border-top border-secondary">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Order</h5>
-                                        <div class="metric-value d-inline-block">
-                                        <?php
-                                        $countTrans = $def->countTrans();
-                                        ?>
-                                            <h1 class="mb-1"><?= $countTrans ?></h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-success font-weight-bold">
-                                            <!-- <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">5.86%</span> -->
-                                            <i class="fas fa-user fa-4x text-muted" style="top:50%;position:absolute;transform:translate(0,-50%);left:50%"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                                <div class="card border-3 border-top border-info">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Visitor</h5>
-                                        <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">100</h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-success font-weight-bold">
-                                            <!-- <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">5.86%</span> -->
-                                            <i class="fas fa-user fa-4x text-muted" style="top:50%;position:absolute;transform:translate(0,-50%);left:50%"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+                        <div class="col">
                             <div class="card">
-                                <h5 class="card-header">User List</h5>
+                                <!-- <h5 class="card-header">Basic Table</h5> -->
                                 <div class="card-body">
-                                    <table class="table">
+                                    <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Username</th>
-                                                <th scope="col">Name</th>
+                                                <th width="180px">Transaction Code</th>
+                                                <th>Buyer Name</th>
+                                                <th>Address</th>
+                                                <th>Order Date</th>
+                                                <th>Payment</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
                                         <?php
-                                        $showUser = $def->showUser();
-                                        $dataUser = $showUser->fetchAll();
-                                        foreach ($dataUser as $rowUser) {
-                                        ?>
-                                            <tr>
-                                                <th scope="row"><?= $rowUser['id'] ?></th>
-                                                <td><?= $rowUser['username'] ?></td>
-                                                <td><?= $rowUser['nama'] ?></td>
-                                            </tr>
-                                        <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            </div>
-                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                            <div class="card">
-                                <h5 class="card-header">Product List</h5>
-                                <div class="card-body">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">ID</th>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Price</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                        $showProd = $def->getProd();
-                                        $dataProd = $showProd->fetchAll();
+                                        $getProd = $def->showTrans();
+                                        $dataProd = $getProd->fetchAll();
                                         foreach ($dataProd as $rowProd) {
-                                            $priceProd = number_format($rowProd['hargabrg'],0,',','.');
+                                            $memID = $rowProd['memberID'];
+                                            $sendUser = $def->getTransUser($memID);
+                                            $dataUser = $sendUser->fetchAll();
+                                            foreach ($dataUser as $rowUser) {
+                                        ?>
+                                        <tbody>
+                                            <tr class="clickable" data-toggle="collapse" data-target="#<?= $rowProd['transCode'] ?>" aria-expanded="false" aria-controls="<?= $rowProd['transCode'] ?>">
+                                                <td><i class="fa fa-plus-circle" style="color:#2ecc71" aria-hidden="true"></i> <?= $rowProd['transCode'] ?></td>
+                                                <td><?= $rowUser['nama'] ?></td>
+                                                <td><?= $rowUser['address'] ?></td>  
+                                                <td><?= $rowProd['tglTrans'] ?></td>
+                                                <td>
+                                                <?php 
+                                                if (isset($rowUser['bukti'])) {
+                                                    echo "Needs check";
+                                                }else{
+                                                    echo "- Empty -";
+                                                }
+                                                ?>
+                                                </td>
+                                                <td><a href="detailTrans.php?id=<?= $rowProd['transCode'] ?>" class="btn btn-primary btn-sm">Detail</a></td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody id="<?= $rowProd['transCode'] ?>" class="collapse ml-2">
+                                            <tr>
+                                                <th></th>
+                                                <th>Product Name</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th>Note</th>
+                                            </tr>
+                                        <?php 
+                                        $transCode = $rowProd['transCode'];
+                                        $sendCode = $def->getTransReal($transCode);
+                                        $dataCode = $sendCode->fetchAll();
+                                        foreach ($dataCode as $rowCode) {
                                         ?>
                                             <tr>
-                                                <th scope="row"><?= $rowProd['id'] ?></th>
-                                                <td><?= $rowProd['namaprod'] ?></td>
-                                                <td>Rp. <?= $priceProd ?></td>
+                                                <td></td>
+                                                <td><?= $rowCode['nama'] ?></td>
+                                                <td><?= $rowCode['harga'] ?></td>
+                                                <td><?= $rowCode['jumlah'] ?></td>  
+                                                <td colspan="2"><?php
+                                                if (empty($rowCode['note'])) {
+                                                    echo "-";
+                                                }else{
+                                                    echo $rowCode['note'];
+                                                }
+                                                ?>
+                                                </td>
                                             </tr>
                                         <?php } ?>
                                         </tbody>
+                                        <?php }} ?>
                                     </table>
+
                                 </div>
                             </div>
-                            </div>
-                        </div>
-                        </div>
+                       </div>
                     </div>
                 </div>
             </div>

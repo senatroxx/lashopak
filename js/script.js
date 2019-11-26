@@ -8,6 +8,18 @@ $(document).ready(function () {
         $('#view').load(hal + '.php');
         return false;
     });
+    // function GetURLParameter(sParam) {
+    //     var sPageURL = window.location.search.substring(1);
+    //     var sURLVariables = sPageURL.split('&');
+    //     for (var i = 0; i < sURLVariables.length; i++) {
+    //         var sParameterName = sURLVariables[i].split('=');
+    //         if (sParameterName[0] == sParam) {
+    //             return sParameterName[1];
+    //         }
+    //     }
+    // }​
+    // let page = GetURLParameter('page');
+
 
     let position = $(window).scrollTop();
     $(window).scroll(function() {

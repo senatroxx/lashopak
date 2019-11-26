@@ -197,12 +197,78 @@ class lashopak
 		}
 
     }
+
+    public function countUser()
+    {
+        $query = "SELECT * FROM member";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute()) {
+            $count = $stmt->rowCount();
+            return $count;
+        }
+    }
+
+    public function countProd()
+    {
+        $query = "SELECT * FROM produk";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute()) {
+            $count = $stmt->rowCount();
+            return $count;
+        }
+    }
+
+    public function countTrans()
+    {
+        $query = "SELECT * FROM transaksi GROUP BY transCode";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute()) {
+            $count = $stmt->rowCount();
+            return $count;
+        }
+    }
+
+    public function showTrans()
+    {
+        $query = "SELECT * FROM transaksi GROUP BY transCode ORDER BY tglTrans ASC";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute()) {
+            return $stmt;
+        }
+    }
+
+    public function getTransUser($memID)
+    {
+        $query = "SELECT * FROM member WHERE id=:memID";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute(array(':memID' => $memID))) {
+            return $stmt;
+        }
+    }
+
+    public function getTransReal($transCode)
+    {
+        $query = "SELECT * FROM transaksi WHERE transCode=:transCode";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute(array(':transCode' => $transCode))) {
+            return $stmt;
+        }
+    }
     
     public function showCart($memID)
     {
         $query = "SELECT * FROM cart WHERE memberID=:id";
         $stmt = $this->db->prepare($query);
         if ($stmt->execute(array(':id' => $memID))) {
+            return $stmt;
+        }
+    }
+
+    public function showUser()
+    {
+        $query = "SELECT * FROM member";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute()) {
             return $stmt;
         }
     }
