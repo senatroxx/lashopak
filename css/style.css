@@ -125,3 +125,33 @@ td{padding:15px;text-align:left;vertical-align:middle;font-weight:300;font-size:
 #tombol-tutup:hover{cursor:pointer;letter-spacing:0}
 #bg{opacity:.8;position:absolute;display:none;position:fixed;top:0;left:0;width:100%;height:100%;background-color:#000;z-index:1001;opacity:.8}
 .empty h1{text-align:center;color:#383838;font-size: 40px;}
+.dropdown {position: relative;display: inline-block;}
+.dropdown p{padding:10px 0px}
+.dropdown-content {display: none;position: absolute;background-color: rgb(37, 37, 37);min-width: 160px;box-shadow: 0px 4px 7px 0px rgba(0,0,0,0.2);z-index: 99;transition:all .3s ease;padding-bottom:10px}
+.dropdown-content.active{display:block}
+.dropdown-content a{display:block;padding:10px 20px;transition:all .2s ease}
+.dropdown-content a:hover{background-color:#333;transition:all .2s ease}
+.btn{padding:5px 20px;color:#fff;border-radius:5px;margin:5px}
+.btn-primary{background-color:#3b86c4}
+.btn-danger{background-color: #e74c3c;}
+.btn-warning{background-color: #f87f1b;color:#2e2e2e}
+button.btn-primary{border:none;border-radius:4px;margin:10px 0 0 0}
+table{border-collapse: collapse;}
+.labels tr td {background-color: rgb(66, 66, 66);font-weight:400;color: #fff;border-right:none;padding:0;border-bottom:2px solid #f6f6f6}
+.labels tr td label {display: block;padding:15px;}
+.hide{display:none;}
+.hide tr{border-bottom:1px solid #ddd}
+.hide tr th,.table tr th{padding:10px;border-right:1px solid #ddd;background-color: rgba(0, 0, 0, 0.1);}
+.hide tr td:first-child, .hide tr th:first-child, .table tr td{border-left:1px solid #ddd}
+[data-toggle="toggle"] {display: none;}
+.underContent{display:grid;grid-template-columns: repeat(2, 1fr);justify-items: center;margin-top:20px;grid-column-gap: 10px;}
+.underContent .bukti{text-align:center;width:100%}
+.underContent .bukti p,.underContent .status p{background-color:#333;color:#fff;padding:50px;display: block;}
+.underContent .status{width:100%}
+.underContent .uploadBukti img{width:200px;float:left;margin-right:20px;box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.5);}
+.underContent h4{text-align:center}
+.__lk-fileInput {cursor: pointer;}
+.__lk-fileInput input {display: none;}
+.__lk-fileInput span {color: #fff;margin: 0 0 10px;padding: 5px 10px;text-decoration: none;background: #418edb;border-radius: 2px;font: normal 14px/1.412 Helvetica;}
+.__lk-fileInput span:hover {background: #2683E1;}
+.__lk-fileInput span.withFile:after {content: '\00d7';font-size:20px;display: inline-block;vertical-align: middle;margin-left: 8px;}

@@ -228,6 +228,67 @@ class lashopak
         }
     }
 
+    public function addPayment($poto,$transCode)
+    {
+        // PP
+        $namapp = $poto['name'];
+        $tmploc = $poto['tmp_name'];
+
+        $allowed        = array('png', 'jpg', 'jpeg');
+        $x              = explode('.', $namapp);
+        $eks            = strtolower(end($x));
+
+        $tanggal        = date("Y-m-d");
+
+        function acak($panjang)
+        {
+            $karakter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456890';
+            $string	  = '';
+
+            for ($i=0; $i < $panjang; $i++) { 
+                $pos = rand(0, strlen($karakter)-1);
+                $string .= $karakter{$pos};
+            };
+            return $string;
+        };
+        $random = acak(16);
+
+        $newfilename    = $random.'.'.$eks;
+
+        if (in_array($eks, $allowed) === TRUE) {
+			move_uploaded_file($tmploc, 'img/bukti/'.$newfilename);
+				$sql = "UPDATE transaksi SET bukti=:bukti WHERE transCode=:transCode";
+				$stmt = $this->db->prepare($sql);
+				$stmt->execute(array(':bukti' => $newfilename, ':transCode' => $transCode));
+				if (!$stmt) {
+					return "Gagal";
+				}else{
+					return "Sukses";
+				}
+		}else{
+			return "EKSGagal";
+		}
+    }
+
+    public function transUserOnly($memID)
+    {
+        $query = "SELECT * FROM transaksi WHERE memberID=:memID GROUP BY transCode";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute(array(':memID' => $memID))) {
+            $count = $stmt->rowCount();
+            return $count;
+        }
+    }
+
+    public function transOnce($transCode)
+    {
+        $query = "SELECT * FROM transaksi WHERE transCode=:transCode GROUP BY transCode";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute(array(':transCode' => $transCode))) {
+            return $stmt;
+        }
+    }
+
     public function showTrans()
     {
         $query = "SELECT * FROM transaksi GROUP BY transCode ORDER BY tglTrans ASC";
@@ -287,6 +348,15 @@ class lashopak
         $query = "SELECT sum(total) AS priceSum FROM cart WHERE memberID=:id";
 		$stmt = $this->db->prepare($query);
 		if ($stmt->execute(array(':id' => $memID))) {
+			return $stmt;
+		}
+    }
+
+    public function transTotal($transCode)
+    {
+        $query = "SELECT sum(total) AS priceSum FROM transaksi WHERE transCode=:id";
+		$stmt = $this->db->prepare($query);
+		if ($stmt->execute(array(':id' => $transCode))) {
 			return $stmt;
 		}
     }

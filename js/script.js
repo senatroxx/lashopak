@@ -50,7 +50,19 @@ $(document).ready(function () {
         });
     })();
 
-    
+    (function () {
+        $('.dropdown, .dropdown-content').hover(function (e) {
+            $(".dropdown-content").stop(true, true).addClass("active");
+        }, function () {
+            $(".dropdown-content").stop(true, true).removeClass("active");
+        });
+    })();
+
+    $(document).ready(function () {
+        $('[data-toggle="toggle"]').change(function () {
+            $(this).parents().next('.hide').toggle();
+        });
+    });
     // $(".description").text(function (index, currentText) {
     //     return currentText.substr(0, 25);
     // });

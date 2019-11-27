@@ -125,28 +125,105 @@ if (isset($_GET['pId'])) {
         </div>
     </div>  
     <div class="header">
-        <div class="searchbar">
-            <form action="" method="post">
-                <div class="inputWrap" style="display:flex;">
-                    <input class="nginput" type="text" placeholder="Search...">
-                    <button type="submit"><i class="fas fa-search"></i></button>
-                </div>
-            </form>
-            <div class="category">
-                <span>Catergory</span>:
-                <?php
-                    $select = $def->getCat();
-                    while ($data = $select->fetch(PDO::FETCH_OBJ)) {
-                        echo "
-                            <a href='?kategori=$data->id'>$data->namaktg</a>
-                        ";
-                    }
-                ?>
-            </div>
+        <div class="back">
+            <a href="javascript:history.back()">Back</a>
         </div>
     </div>
-    <div class="view" id="view">
-        
+    <div class="cointainer">
+        <div class="content3" style="padding-top:10px">
+        <h1 style="text-align:center;color:rgb(66, 66, 66)">On Going Orders</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Transaction Code</th>
+                    <th>Order Date</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $getProd = $def->showTrans();
+                $dataProd = $getProd->fetchAll();
+                foreach ($dataProd as $rowProd) {
+                    $transCode = $rowProd['transCode'];
+                    $sendUser = $def->getTransReal($transCode);
+                    $dataUser = $sendUser->fetchAll();
+                ?>
+                <tbody class="labels">
+                    <tr>
+                        <td>
+                            <label style="display:block" for="<?= $rowProd['transCode'] ?>"><?= $rowProd['transCode'] ?></label>
+                            <input type="checkbox" name="<?= $rowProd['transCode'] ?>" id="<?= $rowProd['transCode'] ?>" data-toggle="toggle">
+                        </td>
+                        <td>
+                            <label style="display:block" for="<?= $rowProd['transCode'] ?>"><?= $rowProd['tglTrans'] ?></label>
+                            <input type="checkbox" name="<?= $rowProd['transCode'] ?>" id="<?= $rowProd['transCode'] ?>" data-toggle="toggle">
+                        </td>
+                        <td>
+                            <label style="display:block" for="<?= $rowProd['transCode'] ?>"><?php 
+                            if (empty($rowProd['bukti'])) {
+                                echo "- Empty -";
+                            }else{
+                                echo "Needs Check";
+                            }
+                            ?></label>
+                            <input type="checkbox" name="<?= $rowProd['transCode'] ?>" id="<?= $rowProd['transCode'] ?>" data-toggle="toggle">
+                        </td>
+                        <td>
+                            <label style="display:block" for="<?= $rowProd['transCode'] ?>"><?= $rowProd['status'] ?></label>
+                            <input type="checkbox" name="<?= $rowProd['transCode'] ?>" id="<?= $rowProd['transCode'] ?>" data-toggle="toggle">
+                        </td>
+                        <td>
+                            <label style="display:block" for="<?= $rowProd['transCode'] ?>"><a href="orderDetails.php?id=<?= $rowProd['transCode'] ?>" class="btn btn-primary">Details</a><a href="orderDelete.php?id=<?= $rowProd['transCode'] ?>" class="btn btn-danger">Delete</a></label>
+                            <input type="checkbox" name="<?= $rowProd['transCode'] ?>" id="<?= $rowProd['transCode'] ?>" data-toggle="toggle">
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody class="hide">
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Note</th>
+                        <th>Total</th>
+                    </tr>
+                <?php 
+                foreach ($dataUser as $rowUser) {
+                    $formatedPrice = number_format($rowUser['harga'],0,',','.');
+                    $formatedTotal = number_format($rowUser['total'],0,',','.');
+                ?>
+                    <tr>
+                        <td><?= $rowUser['nama'] ?></td>
+                        <td>Rp. <?= $formatedPrice ?></td>
+                        <td><?= $rowUser['jumlah'] ?></td>
+                        <td><?php
+                        if (empty($rowUser['note'])) {
+                            echo "-";
+                        }else{
+                            echo $rowUser['note'];
+                        }
+                        ?></td>
+                        <td>Rp. <?= $formatedTotal ?></td>
+                    </tr>
+                <?php } ?>
+                    <tr>
+                        <?php 
+                        $getTransTotal = $def->transTotal($transCode);
+                        $dataTransTotal = $getTransTotal->fetchAll();
+                        foreach ($dataTransTotal as $rowTrans) {
+                            $formatedTotalReal = number_format($rowTrans['priceSum'],0,',','.');
+                        ?>
+                        <td colspan="4">Total</td>
+                        <td>Rp. <?= $formatedTotalReal ?></td>
+                        <?php } ?>
+                    </tr>
+                </tbody>
+                <?php } ?>
+            </tbody>
+        </table>
+        </div>
     </div>
     <div class="footer">
         <p>Copyright &copy; 2019 Lashopak. All Rights Reserverd.</p>
