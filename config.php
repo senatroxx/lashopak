@@ -198,6 +198,16 @@ class lashopak
 
     }
 
+    public function countAdmin()
+    {
+        $query = "SELECT * FROM admin";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute()) {
+            $count = $stmt->rowCount();
+            return $count;
+        }
+    }
+
     public function countUser()
     {
         $query = "SELECT * FROM member";

@@ -67,7 +67,10 @@ $def = new lashopak();
                                 <a class="nav-link active" href="index.php" aria-expanded="false"><i class="fa fa-fw fa-home"></i>Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="order.php" aria-expanded="false"><i class="fas fa-fw fa-hourglass-half"></i>Order</a>
+                            <?php
+                            $countTrans = $def->countTrans();
+                            ?>
+                                <a class="nav-link" href="order.php" aria-expanded="false"><i class="fas fa-fw fa-hourglass-half"></i>Order<span class="badge badge-danger"><?= $countTrans ?></span></a>
                             </li>
                             <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fab fa-fw fa-product-hunt"></i>Product</a>
@@ -111,6 +114,9 @@ $def = new lashopak();
                                     </ul>
                                 </div>
                             </li>
+                            <li class="nav-item logout">
+                                <a class="nav-link" href="logout.php" aria-expanded="false"><i class="fas fa-sign-out-alt"></i></i></i>Log Out</a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -137,6 +143,21 @@ $def = new lashopak();
                     </div>
                     <div class="ecommerce-widget">
                         <div class="row">
+                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                                <div class="card border-3 border-top border-info">
+                                    <div class="card-body">
+                                        <h5 class="text-muted">Admin</h5>
+                                        <div class="metric-value d-inline-block">
+                                            <?php $countAdmin = $def->countAdmin(); ?>
+                                            <h1 class="mb-1"><?= $countAdmin ?></h1>
+                                        </div>
+                                        <div class="metric-label d-inline-block float-right text-success font-weight-bold">
+                                            <!-- <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">5.86%</span> -->
+                                            <i class="fas fa-fw fa-lock fa-4x text-muted" style="top:50%;position:absolute;transform:translate(0,-50%);left:50%"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
                                 <div class="card border-3 border-top border-top-primary">
                                     <div class="card-body">
@@ -166,7 +187,7 @@ $def = new lashopak();
                                         </div>
                                         <div class="metric-label d-inline-block float-right text-success font-weight-bold">
                                             <!-- <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">5.86%</span> -->
-                                            <i class="fas fa-user fa-4x text-muted" style="top:50%;position:absolute;transform:translate(0,-50%);left:50%"></i>
+                                            <i class="fab fa-fw fa-product-hunt fa-4x text-muted" style="top:50%;position:absolute;transform:translate(0,-50%);left:50%"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -183,27 +204,11 @@ $def = new lashopak();
                                         </div>
                                         <div class="metric-label d-inline-block float-right text-success font-weight-bold">
                                             <!-- <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">5.86%</span> -->
-                                            <i class="fas fa-user fa-4x text-muted" style="top:50%;position:absolute;transform:translate(0,-50%);left:50%"></i>
+                                            <i class="fas fa-fw fa-hourglass-half fa-4x text-muted" style="top:50%;position:absolute;transform:translate(0,-50%);left:50%"></i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                                <div class="card border-3 border-top border-info">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Visitor</h5>
-                                        <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">100</h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-success font-weight-bold">
-                                            <!-- <span class="icon-circle-small icon-box-xs text-success bg-success-light"><i class="fa fa-fw fa-arrow-up"></i></span><span class="ml-1">5.86%</span> -->
-                                            <i class="fas fa-user fa-4x text-muted" style="top:50%;position:absolute;transform:translate(0,-50%);left:50%"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                             <div class="card">
                                 <h5 class="card-header">User List</h5>

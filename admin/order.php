@@ -70,7 +70,7 @@ $def = new lashopak();
                             <?php
                             $countTrans = $def->countTrans();
                             ?>
-                                <a class="nav-link active" href="order.php" aria-expanded="false"><i class="fas fa-fw fa-hourglass-half"></i><span class="badge badge-danger"><?= $countTrans ?></span>Order</a>
+                                <a class="nav-link active" href="order.php" aria-expanded="false"><i class="fas fa-fw fa-hourglass-half"></i>Order<span class="badge badge-danger"><?= $countTrans ?></span></a>
                             </li>
                             <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fab fa-fw fa-product-hunt"></i>Product</a>
@@ -113,6 +113,9 @@ $def = new lashopak();
                                         </li>
                                     </ul>
                                 </div>
+                            </li>
+                            <li class="nav-item logout">
+                                <a class="nav-link" href="logout.php" aria-expanded="false"><i class="fas fa-sign-out-alt"></i></i></i>Log Out</a>
                             </li>
                         </ul>
                     </div>

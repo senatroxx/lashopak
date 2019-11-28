@@ -124,6 +124,9 @@ if (isset($_POST['buttonDec'])) {
                                     </ul>
                                 </div>
                             </li>
+                            <li class="nav-item logout">
+                                <a class="nav-link" href="logout.php" aria-expanded="false"><i class="fas fa-sign-out-alt"></i></i></i>Log Out</a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
