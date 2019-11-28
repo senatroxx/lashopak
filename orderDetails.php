@@ -195,10 +195,10 @@ if (isset($_POST['uploadBukti'])) {
                         <form action="" method="post" enctype="multipart/form-data">
                         <?php foreach ($dataTransOnly as $rowTransOnly) { ?>
                         <img src="<?php 
-                        if (isset($rowTransOnly['bukti'])) {
-                            echo "img/bukti/".$rowTransOnly['bukti'];
-                        }else{
+                        if (empty($rowTransOnly['bukti'])) {
                             echo "img/no-image.png";
+                        }else{
+                            echo "img/bukti/".$rowTransOnly['bukti'];
                         }
                         ?>" alt="" id="img-prev">
                         <?php } ?>

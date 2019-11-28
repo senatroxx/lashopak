@@ -307,6 +307,15 @@ class lashopak
         }
     }
 
+    public function getTransUserOnly($memID, $transCode)
+    {
+        $query = "SELECT * FROM member WHERE id=:memID";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute(array(':memID' => $memID))) {
+            return $stmt;
+        }
+    }
+
     public function getTransReal($transCode)
     {
         $query = "SELECT * FROM transaksi WHERE transCode=:transCode";
@@ -340,6 +349,17 @@ class lashopak
         $stmt = $this->db->prepare($query);
         if ($stmt->execute(array(':id' => $productID))) {
             return $stmt;
+        }
+    }
+
+    public function addStatus($status, $transCode)
+    {
+        $query = "UPDATE transaksi SET status=:status WHERE transCode=:transCode";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute(array(':status' => $status, ':transCode' => $transCode))) {
+            return "Sukses";
+        }else{
+            return "Gagal";
         }
     }
 

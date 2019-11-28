@@ -165,7 +165,9 @@ if (isset($_GET['pId'])) {
                             <label style="display:block" for="<?= $rowProd['transCode'] ?>"><?php 
                             if (empty($rowProd['bukti'])) {
                                 echo "- Empty -";
-                            }else{
+                            }else if (isset($rowProd['bukti']) && $rowProd['status'] == "On Process" ) {
+                                echo "Payment Accepted";
+                            }else if (isset($rowProd['bukti'])) {
                                 echo "Needs Check";
                             }
                             ?></label>

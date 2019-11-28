@@ -154,12 +154,13 @@ $def = new lashopak();
                                                 <td><?= $rowUser['nama'] ?></td>
                                                 <td class="address"><?= $rowUser['address'] ?></td>  
                                                 <td><?= $rowProd['tglTrans'] ?></td>
-                                                <td>
-                                                <?php 
+                                                <td><?php 
                                                 if (empty($rowProd['bukti'])) {
                                                     echo "- Empty -";
-                                                }else{
-                                                    echo "Needs check";
+                                                }else if (isset($rowProd['bukti']) && $rowProd['status'] == "On Process" ) {
+                                                    echo "Payment Accepted";
+                                                }else if (isset($rowProd['bukti'])) {
+                                                    echo "Needs Check";
                                                 }
                                                 ?>
                                                 </td><td><?= $rowProd['status'] ?></td>

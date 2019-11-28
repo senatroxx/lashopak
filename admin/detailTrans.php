@@ -3,6 +3,15 @@ if (empty($_SESSION['admin'])) {
     header("location:login.php");
 }
 $def = new lashopak();
+$transCode = $_GET['id'];
+if (isset($_POST['buttonAcc'])) {
+    $status = $_POST['accept'];
+    $addStatus = $def->addStatus($status,$transCode);
+}
+if (isset($_POST['buttonDec'])) {
+    $status = $_POST['decline'];
+    $addStatus = $def->addStatus($status,$transCode);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +29,7 @@ $def = new lashopak();
     <link rel="stylesheet" href="assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="assets/vendor/charts/c3charts/c3.css">
     <link rel="stylesheet" href="assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <link rel="stylesheet" href="assets/vendor/zoomify/zoomify.min.css">
 </head>
 <body>
     <div class="dashboard-main-wrapper">
@@ -125,90 +135,129 @@ $def = new lashopak();
                     <div class="row">
                         <div class="col"> 
                             <div class="card">
-                                <!-- <h5 class="card-header">Basic Table</h5> -->
+                                <h5 class="card-header">Transaction Code: <?= $transCode ?></h5>
                                 <div class="card-body">
                                     <table class="table table-hover">
-                                        <thead>
+                                        <?php 
+                                            $getTransOnce = $def->transOnce($transCode);
+                                            $dataTransOnce = $getTransOnce->fetchAll();
+                                            foreach ($dataTransOnce as $rowTransOnce) {
+                                                $memID = $rowTransOnce['memberID'];
+                                                $getTransUser = $def->getTransUser($memID);
+                                                $dataTransUser = $getTransUser->fetchAll();
+                                                foreach ($dataTransUser as $rowTransUser) {
+                                        ?>
                                             <tr>
-                                                <th width="180px">Transaction Code</th>
                                                 <th>Buyer Name</th>
-                                                <th>Address</th>
+                                                <td><?= $rowTransUser['nama'] ?></td>
+                                                <!-- <th>Address</th>
                                                 <th>Order Date</th>
                                                 <th>Payment</th>
                                                 <th>Status</th>
-                                                <th>Action</th>
+                                                <th>Action</th> -->
                                             </tr>
-                                        </thead>
-                                        <?php
-                                        $getProd = $def->showTrans();
-                                        $dataProd = $getProd->fetchAll();
-                                        foreach ($dataProd as $rowProd) {
-                                            $memID = $rowProd['memberID'];
-                                            $sendUser = $def->getTransUser($memID);
-                                            $dataUser = $sendUser->fetchAll();
-                                            foreach ($dataUser as $rowUser) {
-                                        ?>
-                                        <tbody>
-                                            <tr class="clickable" data-toggle="collapse" data-target="#<?= $rowProd['transCode'] ?>" aria-expanded="false" aria-controls="<?= $rowProd['transCode'] ?>">
-                                                <td><i class="fa fa-plus-circle" style="color:#2ecc71" aria-hidden="true"></i> <?= $rowProd['transCode'] ?></td>
-                                                <td><?= $rowUser['nama'] ?></td>
-                                                <td class="address"><?= $rowUser['address'] ?></td>  
-                                                <td><?= $rowProd['tglTrans'] ?></td>
-                                                <td>
-                                                <?php 
-                                                if (empty($rowProd['bukti'])) {
-                                                    echo "- Empty -";
-                                                }else{
-                                                    echo "Needs check";
-                                                }
-                                                ?>
-                                                </td><td><?= $rowProd['status'] ?></td>
-                                                <td><a href="detailTrans.php?id=<?= $rowProd['transCode'] ?>" class="btn btn-primary btn-sm">Detail</a></td>
-                                            </tr>
-                                        </tbody>
-                                        <tbody id="<?= $rowProd['transCode'] ?>" class="collapse ml-2">
                                             <tr>
-                                                <th style="text-align:center"><i class="fas fa-level-up-alt fa-rotate-90 center"></i></th>
-                                                <th>Product Name</th>
-                                                <th>Price</th>
-                                                <th>Quantity</th>
-                                                <th colspan="3">Note</th>
+                                                <th>Address</th>
+                                                <td><?= $rowTransUser['address'] ?></td>
                                             </tr>
-                                        <?php 
-                                        $transCode = $rowProd['transCode'];
-                                        $sendCode = $def->getTransReal($transCode);
-                                        $dataCode = $sendCode->fetchAll();
-                                        foreach ($dataCode as $rowCode) {
-                                            $formatedPrice = number_format($rowCode['harga'],0,',','.');
-                                        ?>
                                             <tr>
-                                                <td></td>
-                                                <td><?= $rowCode['nama'] ?></td>
-                                                <td>Rp. <?= $formatedPrice ?></td>
-                                                <td><?= $rowCode['jumlah'] ?></td>  
-                                                <td colspan="3" class="note"><?php
-                                                if (empty($rowCode['note'])) {
-                                                    echo "-";
-                                                }else{
-                                                    echo $rowCode['note'];
-                                                }
-                                                ?>
-                                                </td>
+                                                <th>Order Date</th>
+                                                <td><?= $rowTransOnce['tglTrans'] ?></td>
                                             </tr>
-                                        <?php } ?>
-                                        </tbody>
+                                            <tr>
+                                                <th>Telephone</th>
+                                                <td><?= $rowTransUser['telp'] ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Payment Proof</th>
+                                                <td><img src="<?php
+                                                if (empty($rowTransOnce['bukti'])) {
+                                                    echo "../img/no-image.png";
+                                                }else{
+                                                    echo "../img/bukti/".$rowTransOnce['bukti'];
+                                                }
+                                                ?>" alt="" class="img-thumbnail img-bukti" style="width:200px"></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Status</th>
+                                                <td><?php 
+                                                if (isset($rowTransOnce['status'])) {
+                                                    echo $rowTransOnce['status'];
+                                                }else{
+                                                    echo "Unverified";
+                                                }
+                                                ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Action</td>
+                                                <td><form action="" method="post">
+                                                    <input type="hidden" name="accept" value="On Process">
+                                                    <input type="hidden" name="decline" value="Payment not accepted">
+                                                    <button type="submit" class="btn btn-primary" name="buttonAcc">Accept Payment</button>
+                                                    <button type="submit" class="btn btn-danger" name="buttonDec">Decline Payment</button>
+                                                </form></td>
+                                            </tr>
                                         <?php }} ?>
                                     </table>
-
                                 </div>
                             </div>
                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table table-hover">
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Note</th>
+                                            <th>Total</th>
+                                        </tr>
+                                        <?php
+                                        $getTransReal = $def->getTransReal($transCode);
+                                        $dataTransReal = $getTransReal->fetchAll();
+                                        foreach ($dataTransReal as $rowTransReal) {
+                                            $formatedPrice = number_format($rowTransReal['harga'],0,',','.');
+                                            $formatedTotal = number_format($rowTransReal['total'],0,',','.');
+                                        ?>
+                                        <tr>
+                                            <td><?= $rowTransReal['nama'] ?></td>
+                                            <td>Rp. <?= $formatedPrice ?></td>
+                                            <td><?= $rowTransReal['jumlah'] ?></td>
+                                            <td><?php
+                                            if (empty($rowTransReal['note'])) {
+                                                echo "-";
+                                            }else{
+                                                echo $rowTransReal['note'];
+                                            }
+                                            ?></td>
+                                            <td>Rp. <?= $formatedTotal ?></td>
+                                        </tr>
+                                        <?php } ?>
+                                        <td>
+                                            <?php
+                                            $getTransTotal = $def->transTotal($transCode);
+                                            $dataTransTotal = $getTransTotal->fetchAll(); 
+                                            foreach ($dataTransTotal as $rowTransTotal) {
+                                                $formatedTotalReal = number_format($rowTransTotal['priceSum'],0,',','.');
+                                            ?>
+                                            <th colspan="3">Total</th>
+                                            <th>Rp. <?= $formatedTotalReal ?></th>
+                                            <?php } ?>
+                                        </td>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script src="assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="assets/vendor/zoomify/zoomify.min.js"></script>
     <!-- bootstap bundle js -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <!-- slimscroll js -->
@@ -228,19 +277,7 @@ $def = new lashopak();
     <script src="assets/vendor/charts/c3charts/C3chartjs.js"></script>
     <script src="assets/libs/js/dashboard-ecommerce.js"></script>
     <script>
-    $(document).ready(function () {
-    $(".note").each(function () {
-            if ($(this).text().length > 50) {
-                $(this).text($(this).text().substr(0, 50) + '...');
-            }
-        }); 
-    })
-    $(".address").each(function () {
-            if ($(this).text().length > 50) {
-                $(this).text($(this).text().substr(0, 50) + '...');
-            }
-        }); 
-    })
+    $('img').zoomify();
     </script>
 </body>
 </html>
