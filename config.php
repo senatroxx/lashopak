@@ -198,6 +198,15 @@ class lashopak
 
     }
 
+    public function deleteOrder($transCode)
+    {
+        $query = "DELETE FROM transaksi WHERE transCode=:transCode";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute(array(':transCode' => $transCode))) {
+            return "Sukses";
+        }
+    }
+
     public function countAdmin()
     {
         $query = "SELECT * FROM admin";
@@ -205,6 +214,15 @@ class lashopak
         if ($stmt->execute()) {
             $count = $stmt->rowCount();
             return $count;
+        }
+    }
+
+    public function searchProd($param)
+    {
+        $query = "SELECT * FROM produk WHERE namaprod LIKE :param OR deskprod LIKE :param";
+        $stmt = $this->db->prepare($query);
+        if ($stmt->execute(array(':param' => $param))) {
+            return $stmt;
         }
     }
 

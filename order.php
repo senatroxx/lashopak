@@ -34,12 +34,11 @@ if (isset($_GET['pId'])) {
 <body>
 <div class="container">
     <div class="topmenu">
-        <div class="left autoload" id="menu">
-                <h2><a href="" class="brand">LASHOPAK</a></h2>
-                <a href="home">Home</a>
-                <a href="">Category</a>
-                <a href="">About</a>
-                <a href="">Contact</a>
+        <div class="left" id="menu">
+                <h2><a href="index.php" class="brand">LASHOPAK</a></h2>
+                <a href="index.php?page=home">Home</a>
+                <a href="index.php?page=about">About</a>
+                <a href="index.php?page=category">Contact</a>
         </div>
         <div class="right">
             <?php if(isset($_SESSION['user'])){
@@ -123,7 +122,7 @@ if (isset($_GET['pId'])) {
                 <a href="register.php">Register</a>
             <?php } ?>
         </div>
-    </div>  
+    </div>
     <div class="header">
         <div class="back">
             <a href="javascript:history.back()">Back</a>

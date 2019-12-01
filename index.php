@@ -17,6 +17,10 @@ if (isset($_GET['pId'])) {
         header("location:login.php?pId=".$_GET['pId']);
     }
 }
+if (isset($_GET['search'])) {
+    // $param = $_GET['search'];
+	// $addSearch = $def->searchProd($param);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,11 +39,10 @@ if (isset($_GET['pId'])) {
 <div class="container">
     <div class="topmenu">
         <div class="left autoload" id="menu">
-                <h2><a href="" class="brand">LASHOPAK</a></h2>
+                <h2><a href="index.php" class="brand">LASHOPAK</a></h2>
                 <a href="home">Home</a>
-                <a href="">Category</a>
-                <a href="">About</a>
-                <a href="">Contact</a>
+                <a href="about">About</a>
+                <a href="category">Contact</a>
         </div>
         <div class="right">
             <?php if(isset($_SESSION['user'])){
@@ -126,9 +129,9 @@ if (isset($_GET['pId'])) {
     </div>  
     <div class="header">
         <div class="searchbar">
-            <form action="" method="post">
+            <form action="" method="get">
                 <div class="inputWrap" style="display:flex;">
-                    <input class="nginput" type="text" placeholder="Search...">
+                    <input class="nginput" type="text" placeholder="Search..." name="search">
                     <button type="submit"><i class="fas fa-search"></i></button>
                 </div>
             </form>

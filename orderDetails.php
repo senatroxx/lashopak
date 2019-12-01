@@ -3,9 +3,49 @@ $def = new lashopak();
 $transCode = $_GET['id'];
 $getTrans = $def->getTransReal($transCode);
 $dataTrans = $getTrans->fetchAll();
+$getDB = $def->getDB();
 if (isset($_POST['uploadBukti'])) {
     $poto = $_FILES['potoBukti'];
     $add = $def->addPayment($poto,$transCode);
+}
+if (isset($_POST['confirmTrans'])) {
+    $memID = $_POST['memberID'];
+    $prodID = $_POST['prodID'];
+    $transCode = $_POST['transCode'];
+    $tglTrans = $_POST['tglTrans'];
+    $nama = $_POST['nama'];
+    $harga = $_POST['harga'];
+    $jumlah = $_POST['jumlah'];
+    $total = $_POST['total'];
+    $note = $_POST['note'];
+    $bukti = $_POST['bukti'];
+
+    $query = "INSERT INTO pembelian(memberID, prodID, transCode, tglOrder, nama, harga, jumlah, total, note, bukti) VALUES 
+    (:memID, :prodID, :transCode, :tglTrans, :nama, :harga, :jumlah, :total, :note, :bukti)";
+    $stmt = $getDB->prepare($query);
+    $index = 0;
+    foreach ($memID as $dataID) {
+        $stmt->bindParam(':memID', $dataID);
+        $stmt->bindParam(':prodID', $prodID[$index]);
+        $stmt->bindParam(':transCode', $transCode[$index]);
+        $stmt->bindParam(':tglTrans', $tglTrans[$index]);
+        $stmt->bindParam(':nama', $nama[$index]);
+        $stmt->bindParam(':harga', $harga[$index]);
+        $stmt->bindParam(':jumlah', $jumlah[$index]);
+        $stmt->bindParam(':total', $total[$index]);
+        $stmt->bindParam(':note', $note[$index]);
+        $stmt->bindParam(':bukti', $bukti[$index]);
+        if ($stmt->execute()) {
+            $delQuery = "DELETE FROM transaksi WHERE transCode=:transCode";
+            $stmt2 = $getDB->prepare($delQuery);
+            if ($stmt2->execute(array(':transCode' => $_GET['id']))) {
+                header("location:order.php");
+            }
+        }
+
+        $index++;
+    }
+
 }
 ?>
 <!DOCTYPE html>
@@ -26,12 +66,11 @@ if (isset($_POST['uploadBukti'])) {
 <body>
 <div class="container">
     <div class="topmenu">
-        <div class="left autoload" id="menu">
-                <h2><a href="" class="brand">LASHOPAK</a></h2>
-                <a href="home">Home</a>
-                <a href="">Category</a>
-                <a href="">About</a>
-                <a href="">Contact</a>
+        <div class="left" id="menu">
+                <h2><a href="index.php" class="brand">LASHOPAK</a></h2>
+                <a href="index.php?page=home">Home</a>
+                <a href="index.php?page=about">About</a>
+                <a href="index.php?page=category">Contact</a>
         </div>
         <div class="right">
             <?php if(isset($_SESSION['user'])){
@@ -123,7 +162,25 @@ if (isset($_POST['uploadBukti'])) {
             </div>
         </div>
         <div class="content3">
-            <h3>Transaction Code: <?= $transCode ?></h3>
+            <h3 style="float:left">Transaction Code: <?= $transCode ?></h3>
+            <form action="" method="post">
+            <?php
+            $getTransForm = $def->getTransReal($transCode);
+            while ($formTrans = $getTransForm->fetch(PDO::FETCH_OBJ)) { 
+                echo "
+                <input type='hidden' name='memberID[]' value='$formTrans->memberID'>
+                <input type='hidden' name='prodID[]' value='$formTrans->prodID'>
+                <input type='hidden' name='transCode[]' value='$formTrans->transCode'>
+                <input type='hidden' name='tglTrans[]' value='$formTrans->tglTrans'>
+                <input type='hidden' name='nama[]' value='$formTrans->nama'>
+                <input type='hidden' name='harga[]' value='$formTrans->harga'>
+                <input type='hidden' name='jumlah[]' value='$formTrans->jumlah'>
+                <input type='hidden' name='total[]' value='$formTrans->total'>
+                <input type='hidden' name='note[]' value='$formTrans->note'>
+                <input type='hidden' name='bukti[]' value='$formTrans->bukti'>";
+             } ?>
+                <button type="submit" name="confirmTrans" class="btn btn-primary" style="float:right;margin-bottom:20px">Confirm Order</button>
+            </form>
             <table class="table">
                 <tr>
                     <th>Product Name</th>

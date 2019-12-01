@@ -69,11 +69,10 @@ if (isset($_POST['submitTrans'])) {
 <div class="container">
     <div class="topmenu">
         <div class="left" id="menu">
-                <h2><a href="" class="brand">LASHOPAK</a></h2>
-                <a href="home">Home</a>
-                <a href="">Category</a>
-                <a href="">About</a>
-                <a href="">Contact</a>
+                <h2><a href="index.php" class="brand">LASHOPAK</a></h2>
+                <a href="index.php?page=home">Home</a>
+                <a href="index.php?page=about">About</a>
+                <a href="index.php?page=category">Contact</a>
         </div>
         <div class="right">
             <?php if(isset($_SESSION['user'])){
@@ -124,10 +123,35 @@ if (isset($_POST['submitTrans'])) {
 
                     <a href="cart.php" class="checkout">Checkout <i class="fa fa-chevron-right"></i></a>
                 </div>
-                <p><?= $_SESSION['user']['nama'] ?></p>
+                <div class="dropdown"><p><?= $_SESSION['user']['nama'] ?></p>
+                <div class="dropdown-content">
+                <?php
+                $countTrans = $def->transUserOnly($memID);
+                ?>
+                    <a href="order.php">Order <span class="badge"><?= $countTrans ?></span></a>
+                    <a href="">Settings</a>
+                </div>
+                </div>
                 <a href="logout.php">Logout</a>
             <?php } if (empty($_SESSION['user'])) { ?>
-                <p><i class="fas fa-shopping-cart"></i> Cart <span class="badge">0</span></p>
+                <a href="cart.php" id="cart"><i class="fas fa-shopping-cart"></i> Cart <span class="badge">0</span></a>
+                <div class="shopping-cart">
+                    <div class="shopping-cart-header">
+                    <i class="fa fa-shopping-cart cart-icon"></i><span class="badge">0</span>
+                    <div class="shopping-cart-total">
+                        <span class="lighter-text">Total:</span>
+                        <span class="main-color-text total">Rp. 0</span>
+                    </div>
+                    </div> <!--end shopping-cart-header -->
+
+                    <ul class="shopping-cart-items">
+                        <div class="empty">
+                            <h1 style="font-size:16px">You must be logged in to view the cart</h1>
+                        </div>
+                    </ul>
+
+                    <a href="cart.php" class="checkout">Checkout <i class="fa fa-chevron-right"></i></a>
+                </div>
                 <a href="login.php">Login</a>
                 <a href="register.php">Register</a>
             <?php } ?>
